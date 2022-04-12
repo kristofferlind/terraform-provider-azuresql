@@ -17,7 +17,9 @@ main.go and everything that resides in internal/provider directory is terraform 
 ## Development
 This plugin is based on Terraform Plugin Framework and the documentation for that should therefore be a good source of information (https://www.terraform.io/plugin/framework).
 
-`nix-shell --pure` open shell with all prerequisites installed  
-`make test` build, install and execute tests
+command | description
+---|---
+`nix-shell --pure` | open shell with all prerequisites installed  
+`make test` | build, install and execute tests
 
 Check makefile for more options.

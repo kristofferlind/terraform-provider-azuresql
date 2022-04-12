@@ -24,11 +24,11 @@ test: install test-local-down test-local-up
 
 test-local-up:
 	docker-compose up -d
-	docker-compose exec mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE test"
-	docker-compose exec mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE test2"
-	docker-compose exec mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "sp_configure 'contained database authentication', 1; RECONFIGURE"
-	docker-compose exec mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE contained_test CONTAINMENT = PARTIAL"
-	docker-compose exec mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE contained_test2 CONTAINMENT = PARTIAL"
+	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE test"
+	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE test2"
+	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "sp_configure 'contained database authentication', 1; RECONFIGURE"
+	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE contained_test CONTAINMENT = PARTIAL"
+	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE contained_test2 CONTAINMENT = PARTIAL"
 
 test-local-down:
 	docker-compose down

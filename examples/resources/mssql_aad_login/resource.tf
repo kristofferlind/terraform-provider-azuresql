@@ -1,3 +1,3 @@
-resource "mssql_external_login" "this" {
+resource "mssql_aad_login" "this" {
   name = "display_name of aad group/user/application"
 }

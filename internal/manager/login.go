@@ -21,6 +21,7 @@ func (manager *Manager) GetLogin(context context.Context, username string) (*DBL
 	err := manager.queryRow(
 		context,
 		statement,
+		"",
 		func(row *sql.Row) error {
 			return row.Scan(&login.LoginName, &login.PrincipalID)
 		},
@@ -40,23 +41,7 @@ func (manager *Manager) CreateLogin(context context.Context, username string, pa
 	err := manager.execute(
 		context,
 		statement,
-	)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (manager *Manager) CreateAADLogin(context context.Context, username string) error {
-	statement := fmt.Sprintf(`
-    CREATE LOGIN %[1]s FROM EXTERNAL PROVIDER
-  `, username)
-
-	err := manager.execute(
-		context,
-		statement,
+		"",
 	)
 
 	if err != nil {
@@ -74,6 +59,7 @@ func (manager *Manager) UpdateLogin(context context.Context, username string, pa
 	err := manager.execute(
 		context,
 		statement,
+		"",
 	)
 	if err != nil {
 		return err
@@ -90,6 +76,7 @@ func (manager *Manager) DeleteLogin(context context.Context, username string) er
 	err := manager.execute(
 		context,
 		statement,
+		"",
 	)
 	if err != nil {
 		return err

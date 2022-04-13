@@ -15,14 +15,14 @@ func (manager *Manager) GetLoginUser(context context.Context, username string, d
 	var loginUser DBLoginUser
 
 	statement := fmt.Sprintf(`
-    USE %[1]s
     SELECT name FROM [sys].database_principals
-    WHERE name = '%[2]s'
-  `, database, username)
+    WHERE name = '%[1]s'
+  `, username)
 
 	err := manager.queryRow(
 		context,
 		statement,
+		database,
 		func(row *sql.Row) error {
 			return row.Scan(&loginUser.LoginName)
 		},
@@ -39,13 +39,13 @@ func (manager *Manager) GetLoginUser(context context.Context, username string, d
 
 func (manager *Manager) CreateUser(context context.Context, username string, password string, database string) error {
 	statement := fmt.Sprintf(`
-    USE %[1]s
-    CREATE USER %[2]s WITH PASSWORD = '%[3]s'
-  `, database, username, password)
+    CREATE USER %[1]s WITH PASSWORD = '%[2]s'
+  `, username, password)
 
 	err := manager.execute(
 		context,
 		statement,
+		database,
 	)
 
 	if err != nil {
@@ -57,13 +57,13 @@ func (manager *Manager) CreateUser(context context.Context, username string, pas
 
 func (manager *Manager) CreateExternalUser(context context.Context, username string, database string) error {
 	statement := fmt.Sprintf(`
-    USE %[1]s
-    CREATE USER %[2]s FROM EXTERNAL PROVIDER'
-  `, database, username)
+    CREATE USER %[1]s FROM EXTERNAL PROVIDER'
+  `, username)
 
 	err := manager.execute(
 		context,
 		statement,
+		database,
 	)
 
 	if err != nil {
@@ -75,13 +75,13 @@ func (manager *Manager) CreateExternalUser(context context.Context, username str
 
 func (manager *Manager) CreateLoginUser(context context.Context, username string, database string) error {
 	statement := fmt.Sprintf(`
-    USE %[1]s
-    CREATE USER %[2]s FROM LOGIN %[2]s
-  `, database, username)
+    CREATE USER %[1]s FROM LOGIN %[1]s
+  `, username)
 
 	err := manager.execute(
 		context,
 		statement,
+		database,
 	)
 
 	if err != nil {
@@ -93,13 +93,13 @@ func (manager *Manager) CreateLoginUser(context context.Context, username string
 
 func (manager *Manager) DeleteLoginUser(context context.Context, username string, database string) error {
 	statement := fmt.Sprintf(`
-    USE %[1]s
-    DROP USER %[2]s
-  `, database, username)
+    DROP USER %[1]s
+  `, username)
 
 	err := manager.execute(
 		context,
 		statement,
+		database,
 	)
 
 	if err != nil {

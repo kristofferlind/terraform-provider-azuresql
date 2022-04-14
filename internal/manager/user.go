@@ -39,7 +39,7 @@ func (manager *Manager) GetLoginUser(context context.Context, username string, d
 
 func (manager *Manager) CreateUser(context context.Context, username string, password string, database string) error {
 	statement := fmt.Sprintf(`
-    CREATE USER %[1]s WITH PASSWORD = '%[2]s'
+    CREATE USER [%[1]s] WITH PASSWORD = '%[2]s'
   `, username, password)
 
 	err := manager.execute(
@@ -57,7 +57,7 @@ func (manager *Manager) CreateUser(context context.Context, username string, pas
 
 func (manager *Manager) CreateExternalUser(context context.Context, username string, database string) error {
 	statement := fmt.Sprintf(`
-    CREATE USER %[1]s FROM EXTERNAL PROVIDER'
+    CREATE USER [%[1]s] FROM EXTERNAL PROVIDER'
   `, username)
 
 	err := manager.execute(
@@ -75,7 +75,7 @@ func (manager *Manager) CreateExternalUser(context context.Context, username str
 
 func (manager *Manager) CreateLoginUser(context context.Context, username string, database string) error {
 	statement := fmt.Sprintf(`
-    CREATE USER %[1]s FROM LOGIN %[1]s
+    CREATE USER [%[1]s] FROM LOGIN [%[1]s]
   `, username)
 
 	err := manager.execute(
@@ -93,7 +93,7 @@ func (manager *Manager) CreateLoginUser(context context.Context, username string
 
 func (manager *Manager) DeleteLoginUser(context context.Context, username string, database string) error {
 	statement := fmt.Sprintf(`
-    DROP USER %[1]s
+    DROP USER [%[1]s]
   `, username)
 
 	err := manager.execute(

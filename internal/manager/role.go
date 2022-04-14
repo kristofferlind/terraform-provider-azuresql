@@ -45,7 +45,7 @@ func (manager *Manager) GetUserWithRole(context context.Context, username string
 
 func (manager *Manager) AddRole(context context.Context, username string, role string, database string) error {
 	statement := fmt.Sprintf(`
-    ALTER ROLE %[2]s ADD MEMBER %[1]s
+    ALTER ROLE %[2]s ADD MEMBER [%[1]s]
   `, username, role)
 
 	err := manager.execute(
@@ -63,7 +63,7 @@ func (manager *Manager) AddRole(context context.Context, username string, role s
 
 func (manager *Manager) RemoveRole(context context.Context, username string, role string, database string) error {
 	statement := fmt.Sprintf(`
-    ALTER ROLE %[2]s DROP MEMBER %[1]s
+    ALTER ROLE %[2]s DROP MEMBER [%[1]s]
   `, username, role)
 
 	err := manager.execute(

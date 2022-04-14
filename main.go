@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/kristofferlind/terraform-provider-mssql/internal/provider"
+	"github.com/kristofferlind/terraform-provider-azuresql/internal/provider"
 
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 )
@@ -21,7 +21,7 @@ var (
 
 func main() {
 	options := tfsdk.ServeOpts{
-		Name: "registry.terraform.io/kristofferlind/mssql",
+		Name: "registry.terraform.io/kristofferlind/azuresql",
 	}
 
 	err := tfsdk.Serve(context.Background(), provider.New(version), options)

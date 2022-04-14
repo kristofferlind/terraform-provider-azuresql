@@ -16,15 +16,15 @@ func TestAccLoginResource(t *testing.T) {
 			{
 				Config: testAccLoginResourceConfig("testuser", "p@ssword1"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("mssql_login.test", "name", "testuser"),
-					resource.TestCheckResourceAttr("mssql_login.test", "password", "p@ssword1"),
+					resource.TestCheckResourceAttr("azuresql_login.test", "name", "testuser"),
+					resource.TestCheckResourceAttr("azuresql_login.test", "password", "p@ssword1"),
 				),
 			},
 			// Update and Read testing
 			{
 				Config: testAccLoginResourceConfig("testuser", "p@ssword2"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("mssql_login.test", "password", "p@ssword2"),
+					resource.TestCheckResourceAttr("azuresql_login.test", "password", "p@ssword2"),
 				),
 			},
 			// Delete testing automatically occurs in TestCase
@@ -34,11 +34,11 @@ func TestAccLoginResource(t *testing.T) {
 
 func testAccLoginResourceConfig(username string, password string) string {
 	config := fmt.Sprintf(`
-provider "mssql" {
+provider "azuresql" {
   connection_string = "sqlserver://sa:p@ssw0rd@localhost:1433"
 }
 
-resource "mssql_login" "test" {
+resource "azuresql_login" "test" {
   name = %[1]q
   password = %[2]q
 }

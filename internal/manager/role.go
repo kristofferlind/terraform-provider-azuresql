@@ -17,13 +17,13 @@ func (manager *Manager) GetUserWithRole(context context.Context, username string
 	var isRoleMember int
 
 	statement := fmt.Sprintf(`
-    USE %[1]s
-    SELECT IS_ROLEMEMBER ('%[3]s', '%[2]s')
-  `, database, username, role)
+    SELECT IS_ROLEMEMBER ('%[2]s', '%[1]s')
+  `, username, role)
 
 	err := manager.queryRow(
 		context,
 		statement,
+		database,
 		func(row *sql.Row) error {
 			return row.Scan(&isRoleMember)
 		},
@@ -45,13 +45,13 @@ func (manager *Manager) GetUserWithRole(context context.Context, username string
 
 func (manager *Manager) AddRole(context context.Context, username string, role string, database string) error {
 	statement := fmt.Sprintf(`
-    USE %[1]s
-    ALTER ROLE %[3]s ADD MEMBER %[2]s
-  `, database, username, role)
+    ALTER ROLE %[2]s ADD MEMBER [%[1]s]
+  `, username, role)
 
 	err := manager.execute(
 		context,
 		statement,
+		database,
 	)
 
 	if err != nil {
@@ -63,13 +63,13 @@ func (manager *Manager) AddRole(context context.Context, username string, role s
 
 func (manager *Manager) RemoveRole(context context.Context, username string, role string, database string) error {
 	statement := fmt.Sprintf(`
-    USE %[1]s
-    ALTER ROLE %[3]s DROP MEMBER %[2]s
-  `, database, username, role)
+    ALTER ROLE %[2]s DROP MEMBER [%[1]s]
+  `, username, role)
 
 	err := manager.execute(
 		context,
 		statement,
+		database,
 	)
 
 	if err != nil {

@@ -71,7 +71,7 @@ func (resource loginUserResource) Create(context context.Context, request tfsdk.
 	// create login
 	err := resource.provider.manager.CreateLoginUser(context, data.LoginName.Value, data.Database.Value)
 	if err != nil {
-		response.Diagnostics.AddError("Failed to create user", err.Error())
+		response.Diagnostics.AddError("Failed to create login user", err.Error())
 		return
 	}
 
@@ -93,7 +93,7 @@ func (resource loginUserResource) Read(context context.Context, request tfsdk.Re
 
 	user, err := resource.provider.manager.GetLoginUser(context, data.LoginName.Value, data.Database.Value)
 	if err != nil {
-		response.Diagnostics.AddError("Failed to read login", err.Error())
+		response.Diagnostics.AddError("Failed to read login user", err.Error())
 		return
 	}
 
@@ -130,7 +130,7 @@ func (resource loginUserResource) Delete(context context.Context, request tfsdk.
 	// delete login
 	err := resource.provider.manager.DeleteLoginUser(context, data.LoginName.Value, data.Database.Value)
 	if err != nil {
-		response.Diagnostics.AddError("Failed to delete login", err.Error())
+		response.Diagnostics.AddError("Failed to delete login user", err.Error())
 		return
 	}
 

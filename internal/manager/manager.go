@@ -4,49 +4,58 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strings"
 	"time"
 
 	_ "github.com/denisenkom/go-mssqldb"
+	"github.com/denisenkom/go-mssqldb/azuread"
 )
 
 type Manager struct {
-	connectionString string
+	connectionString         string
+	useAzureADAuthentication bool
 }
 
 func GetManager(connectionString string) Manager {
+	useAzureADAuthentication := false
+	if strings.Contains(connectionString, "fedauth") {
+		useAzureADAuthentication = true
+	}
+
 	return Manager{
-		connectionString: connectionString,
+		connectionString:         connectionString,
+		useAzureADAuthentication: useAzureADAuthentication,
 	}
 }
 
-func (manager *Manager) execute(context context.Context, command string, params ...interface{}) error {
-	connection, err := manager.connect(context)
+func (manager *Manager) execute(context context.Context, command string, database string) error {
+	connection, err := manager.connect(context, database)
 	if err != nil {
 		return err
 	}
 	defer connection.Close()
-	_, err = connection.ExecContext(context, command, params...)
+	_, err = connection.ExecContext(context, command)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (manager *Manager) queryRow(context context.Context, query string, scanner func(*sql.Row) error, params ...interface{}) error {
-	connection, err := manager.connect(context)
+func (manager *Manager) queryRow(context context.Context, query string, database string, scanner func(*sql.Row) error) error {
+	connection, err := manager.connect(context, database)
 	if err != nil {
 		return err
 	}
 	defer connection.Close()
-	row := connection.QueryRowContext(context, query, params...)
+	row := connection.QueryRowContext(context, query)
 	if row.Err() != nil {
 		return row.Err()
 	}
 	return scanner(row)
 }
 
-func (manager *Manager) connect(context context.Context) (*sql.DB, error) {
-	db, err := manager.open(context)
+func (manager *Manager) connect(context context.Context, database string) (*sql.DB, error) {
+	db, err := manager.open(context, database)
 	if err == nil {
 		return db, nil
 	}
@@ -64,7 +73,7 @@ func (manager *Manager) connect(context context.Context) (*sql.DB, error) {
 		case <-timeoutExceeded:
 			return nil, fmt.Errorf("failed to connect to database")
 		case <-ticker.C:
-			db, err := manager.open(context)
+			db, err := manager.open(context, database)
 			if err == nil {
 				return db, nil
 			}
@@ -72,8 +81,20 @@ func (manager *Manager) connect(context context.Context) (*sql.DB, error) {
 	}
 }
 
-func (manager *Manager) open(context context.Context) (*sql.DB, error) {
-	db, err := sql.Open("sqlserver", manager.connectionString)
+func (manager *Manager) open(context context.Context, database string) (*sql.DB, error) {
+	driver := "sqlserver"
+	connectionString := manager.connectionString
+	if manager.useAzureADAuthentication {
+		driver = azuread.DriverName
+	}
+	if len(database) > 0 {
+		operator := "?"
+		if strings.Contains(connectionString, "?") {
+			operator = "&"
+		}
+		connectionString = connectionString + operator + "database=" + database
+	}
+	db, err := sql.Open(driver, connectionString)
 	if err != nil {
 		return nil, err
 	}

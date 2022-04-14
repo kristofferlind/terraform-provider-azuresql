@@ -1,4 +1,4 @@
-resource "mssql_login" "this" {
+resource "azuresql_login" "this" {
   name     = "name"
   password = "password"
 }

@@ -5,6 +5,7 @@ pkgs.mkShell {
   buildInputs = [
     pkgs.docker
     pkgs.docker-compose
+    pkgs.git
     pkgs.go_1_18
     pkgs.terraform
   ];

@@ -23,7 +23,7 @@ type userResource struct {
 
 func (t userResourceType) GetSchema(context context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
-		MarkdownDescription: "MSSQL Database user for login",
+		MarkdownDescription: "User for database level authentication, needs Azure SQL database or containment level PARTIAL",
 
 		Attributes: map[string]tfsdk.Attribute{
 			// needed to keep testing framework happy, just set to name

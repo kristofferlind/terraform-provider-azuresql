@@ -3,12 +3,12 @@
 page_title: "azuresql_aad_user Resource - terraform-provider-azuresql"
 subcategory: ""
 description: |-
-  MSSQL Database user for AzureAD user/group/application
+  Database user for AzureAD user/group/application, needed to configure access at database level
 ---
 
 # azuresql_aad_user (Resource)
 
-MSSQL Database user for AzureAD user/group/application
+Database user for AzureAD user/group/application, needed to configure access at database level
 
 ## Example Usage
 

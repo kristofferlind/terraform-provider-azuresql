@@ -3,12 +3,12 @@
 page_title: "azuresql_aad_login Resource - terraform-provider-azuresql"
 subcategory: ""
 description: |-
-  MSSQL Server login for Azure AD user, group or application
+  Login for Azure AD user, group or application
 ---
 
 # azuresql_aad_login (Resource)
 
-MSSQL Server login for Azure AD user, group or application
+Login for Azure AD user, group or application
 
 ## Example Usage
 

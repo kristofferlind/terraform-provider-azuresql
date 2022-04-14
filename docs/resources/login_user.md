@@ -3,12 +3,12 @@
 page_title: "azuresql_login_user Resource - terraform-provider-azuresql"
 subcategory: ""
 description: |-
-  MSSQL Database user for login
+  Database user linked with login
 ---
 
 # azuresql_login_user (Resource)
 
-MSSQL Database user for login
+Database user linked with login
 
 ## Example Usage
 
@@ -19,6 +19,8 @@ resource "azuresql_login" "this" {
 }
 
 resource "azuresql_login_user" "this" {
+  # it's currently important that this is an implicit dependency
+  # for resources to be created/deleted in the correct order
   name     = azuresql_login.this.name
   database = "example_db"
 }

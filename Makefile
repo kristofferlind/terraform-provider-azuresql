@@ -1,6 +1,6 @@
 HOSTNAME=registry.terraform.io
 NAMESPACE=kristofferlind
-NAME=mssql
+NAME=azuresql
 BINARY=terraform-provider-${NAME}
 OS_ARCH=linux_amd64
 

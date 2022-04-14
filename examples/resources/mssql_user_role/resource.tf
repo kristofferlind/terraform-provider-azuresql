@@ -1,11 +1,11 @@
-resource "mssql_user" "this" {
+resource "azuresql_user" "this" {
   name     = "name"
   password = "password"
   database = "example_db"
 }
 
-resource "mssql_user_role" "this" {
-  name     = mssql_user.this.name
-  database = mssql_user.this.database
+resource "azuresql_user_role" "this" {
+  name     = azuresql_user.this.name
+  database = azuresql_user.this.database
   role     = "db_reader"
 }

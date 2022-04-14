@@ -1,4 +1,4 @@
-module github.com/kristofferlind/terraform-provider-mssql
+module github.com/kristofferlind/terraform-provider-azuresql
 
 go 1.18
 

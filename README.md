@@ -1,4 +1,4 @@
-# terraform-provider-mssql
+# terraform-provider-azuresql
 Provider for managing MSSQL Server users and permissions. Documentation can be found in /docs or the registry.
 
 Using an unofficial terraform provider is pretty scary and it therefore needs to be really easy to review and fork. That leaves us with the following focus points:

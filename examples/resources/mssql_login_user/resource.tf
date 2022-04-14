@@ -1,9 +1,9 @@
-resource "mssql_login" "this" {
+resource "azuresql_login" "this" {
   name     = "name"
   password = "password"
 }
 
-resource "mssql_login_user" "this" {
-  name     = mssql_login.this.name
+resource "azuresql_login_user" "this" {
+  name     = azuresql_login.this.name
   database = "example_db"
 }

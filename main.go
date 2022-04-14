@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/kristofferlind/terraform-provider-mssql/internal/provider"
+	"github.com/kristofferlind/terraform-provider-azuresql/internal/provider"
 
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 )

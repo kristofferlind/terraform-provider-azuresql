@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kristofferlind/terraform-provider-mssql/internal/manager"
+	"github.com/kristofferlind/terraform-provider-azuresql/internal/manager"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
@@ -38,12 +38,12 @@ func (provider *provider) Configure(context context.Context, request tfsdk.Confi
 
 func (provider *provider) GetResources(context context.Context) (map[string]tfsdk.ResourceType, diag.Diagnostics) {
 	return map[string]tfsdk.ResourceType{
-		"mssql_login":      loginResourceType{},
-		"mssql_aad_login":  externalLoginResourceType{},
-		"mssql_login_user": loginUserResourceType{},
-		"mssql_user":       userResourceType{},
-		"mssql_aad_user":   externalUserResourceType{},
-		"mssql_user_role":  userRoleResourceType{},
+		"azuresql_login":      loginResourceType{},
+		"azuresql_aad_login":  externalLoginResourceType{},
+		"azuresql_login_user": loginUserResourceType{},
+		"azuresql_user":       userResourceType{},
+		"azuresql_aad_user":   externalUserResourceType{},
+		"azuresql_user_role":  userRoleResourceType{},
 	}, nil
 }
 

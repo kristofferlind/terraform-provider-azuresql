@@ -16,7 +16,7 @@ env:
 
 jobs:
   tests:
-    uses: .github/workflows/test.yml
+    uses: ./.github/workflows/test.yml
   goreleaser:
     runs-on: ubuntu-latest
     steps:

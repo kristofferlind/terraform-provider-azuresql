@@ -3,12 +3,12 @@
 page_title: "azuresql_login Resource - terraform-provider-azuresql"
 subcategory: ""
 description: |-
-  MSSQL Server login
+  Login for local users with password
 ---
 
 # azuresql_login (Resource)
 
-MSSQL Server login
+Login for local users with password
 
 ## Example Usage
 

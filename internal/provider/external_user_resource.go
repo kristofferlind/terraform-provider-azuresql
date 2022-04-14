@@ -22,7 +22,7 @@ type externalUserResource struct {
 
 func (t externalUserResourceType) GetSchema(context context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
-		MarkdownDescription: "MSSQL Database user for AzureAD user/group/application",
+		MarkdownDescription: "Database user for AzureAD user/group/application, needed to configure access at database level",
 
 		Attributes: map[string]tfsdk.Attribute{
 			// needed to keep testing framework happy, just set to name

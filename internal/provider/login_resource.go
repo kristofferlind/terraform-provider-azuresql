@@ -23,7 +23,7 @@ type loginResource struct {
 
 func (t loginResourceType) GetSchema(context context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
-		MarkdownDescription: "MSSQL Server login",
+		MarkdownDescription: "Login for local users with password",
 
 		Attributes: map[string]tfsdk.Attribute{
 			// needed to keep testing framework happy, just set to login_name

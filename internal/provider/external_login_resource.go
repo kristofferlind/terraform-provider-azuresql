@@ -22,7 +22,7 @@ type externalLoginResource struct {
 
 func (t externalLoginResourceType) GetSchema(context context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
-		MarkdownDescription: "MSSQL Server login for Azure AD user, group or application",
+		MarkdownDescription: "Login for Azure AD user, group or application",
 
 		Attributes: map[string]tfsdk.Attribute{
 			// needed to keep testing framework happy, just set to login_name

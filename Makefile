@@ -22,6 +22,9 @@ test: install test-local-down test-local-up
 	TF_ACC=local go test -cover -v ./...
 	$(MAKE) test-local-down
 
+test-release:
+	goreleaser release --rm-dist --skip-publish --skip-sign --snapshot
+
 test-local-up:
 	docker-compose up -d
 	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE test"

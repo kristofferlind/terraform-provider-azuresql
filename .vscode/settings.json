@@ -1,0 +1,28 @@
+{
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform",
+    "editor.formatOnSave": true
+  },
+  "cSpell.words": [
+    "denisenkom",
+    "ghaction",
+    "goarch",
+    "gomod",
+    "goreleaser",
+    "Gosec",
+    "hashicorp",
+    "kristofferlind",
+    "ldflags",
+    "azuresql",
+    "mssqldb",
+    "nvarchar",
+    "pinentry",
+    "securego",
+    "tflog",
+    "tfplugindocs",
+    "tfprotov",
+    "tfsdk",
+    "tftypes",
+    "trimpath"
+  ]
+}

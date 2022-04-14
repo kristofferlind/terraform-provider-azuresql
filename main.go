@@ -21,7 +21,7 @@ var (
 
 func main() {
 	options := tfsdk.ServeOpts{
-		Name: "registry.terraform.io/kristofferlind/mssql",
+		Name: "registry.terraform.io/kristofferlind/azuresql",
 	}
 
 	err := tfsdk.Serve(context.Background(), provider.New(version), options)

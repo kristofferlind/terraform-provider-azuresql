@@ -30,7 +30,6 @@ func (provider *provider) Configure(context context.Context, request tfsdk.Confi
 		return
 	}
 
-	// connect to MSSQL server here?
 	provider.manager = manager.GetManager(data.ConnectionString.Value)
 
 	provider.configured = true

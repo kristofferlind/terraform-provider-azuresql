@@ -27,3 +27,6 @@ Check makefile for more options.
 ## Known issues
 - Need to specify resources with implicit dependencies for them to be created and deleted in the correct order
 - aad_user is untested (feature is currently public preview)
+
+## License
+Based on [terraform-provider-scaffolding-framework](https://github.com/hashicorp/terraform-provider-scaffolding-framework) and sticks with the license of that.

@@ -11,9 +11,6 @@ This provider currently only has acceptance tests against a local docker based m
 ## Dependencies
 Other than terraform boilerplate/plumbing this provider only utilizes an mssql driver, specifically github.com/denisenkom/go-mssqldb, which is also mentioned in Microsoft's documentation for working with mssql using golang.
 
-## Structure
-main.go and everything that resides in internal/provider directory is terraform boilerplate and dependencies, internal/manager contains the actual implementation and it's dependencies.
-
 ## Development
 This plugin is based on Terraform Plugin Framework and the documentation for that should therefore be a good source of information (https://www.terraform.io/plugin/framework).
 

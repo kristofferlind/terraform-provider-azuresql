@@ -12,8 +12,9 @@ import (
 type externalLoginResourceType struct{}
 
 type externalLoginResourceData struct {
-	Id        types.String `tfsdk:"id"`
-	LoginName types.String `tfsdk:"name"`
+	Id              types.String `tfsdk:"id"`
+	LoginName       types.String `tfsdk:"name"`
+	DefaultDatabase types.String `tfsdk:"default_database"`
 }
 
 type externalLoginResource struct {
@@ -38,6 +39,11 @@ func (t externalLoginResourceType) GetSchema(context context.Context) (tfsdk.Sch
 					tfsdk.RequiresReplace(),
 				},
 			},
+			"default_database": {
+				MarkdownDescription: "Default database (master if nothing set, login_user needed in default database to allow logging in)",
+				Required:            true,
+				Type:                types.StringType,
+			},
 		},
 	}, nil
 }
@@ -61,7 +67,7 @@ func (resource externalLoginResource) Create(context context.Context, request tf
 	}
 
 	// create login
-	err := resource.provider.manager.CreateAADLogin(context, data.LoginName.Value)
+	err := resource.provider.manager.CreateAADLogin(context, data.LoginName.Value, data.DefaultDatabase.Value)
 	if err != nil {
 		response.Diagnostics.AddError("Failed to create login", err.Error())
 		return
@@ -93,6 +99,7 @@ func (resource externalLoginResource) Read(context context.Context, request tfsd
 	}
 
 	data.LoginName = types.String{Value: login.LoginName}
+	data.DefaultDatabase = types.String{Value: login.DefaultDatabase}
 
 	diagnostics = response.State.Set(context, &data)
 	response.Diagnostics.Append(diagnostics...)
@@ -108,7 +115,16 @@ func (resource externalLoginResource) Update(context context.Context, request tf
 		return
 	}
 
-	response.Diagnostics.AddError("Not implemented", "update should not be allowed on this resource, should always be a replace operation")
+	err := resource.provider.manager.UpdateAADLogin(context, data.LoginName.Value, data.DefaultDatabase.Value)
+	if err != nil {
+		response.Diagnostics.AddError("Failed to update login", err.Error())
+		return
+	}
+
+	data.Id = types.String{Value: data.LoginName.Value}
+
+	diagnostics = response.State.Set(context, &data)
+	response.Diagnostics.Append(diagnostics...)
 }
 
 func (resource externalLoginResource) Delete(context context.Context, request tfsdk.DeleteResourceRequest, response *tfsdk.DeleteResourceResponse) {
@@ -122,7 +138,7 @@ func (resource externalLoginResource) Delete(context context.Context, request tf
 	}
 
 	// delete login
-	err := resource.provider.manager.DeleteAADLogin(context, data.LoginName.Value)
+	err := resource.provider.manager.DeleteLogin(context, data.LoginName.Value)
 	if err != nil {
 		response.Diagnostics.AddError("Failed to delete login", err.Error())
 		return

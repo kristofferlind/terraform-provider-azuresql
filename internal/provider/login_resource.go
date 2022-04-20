@@ -6,15 +6,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 type loginResourceType struct{}
 
 type loginResourceData struct {
-	Id        types.String `tfsdk:"id"`
-	LoginName types.String `tfsdk:"name"`
-	Password  types.String `tfsdk:"password"`
+	Id              types.String `tfsdk:"id"`
+	LoginName       types.String `tfsdk:"name"`
+	Password        types.String `tfsdk:"password"`
+	DefaultDatabase types.String `tfsdk:"default_database"`
 }
 
 type loginResource struct {
@@ -45,6 +45,11 @@ func (t loginResourceType) GetSchema(context context.Context) (tfsdk.Schema, dia
 				Type:                types.StringType,
 				Sensitive:           true,
 			},
+			"default_database": {
+				MarkdownDescription: "Default database (master if nothing set, login_user needed in default database to allow logging in)",
+				Required:            true,
+				Type:                types.StringType,
+			},
 		},
 	}, nil
 }
@@ -68,15 +73,13 @@ func (resource loginResource) Create(context context.Context, request tfsdk.Crea
 	}
 
 	// create login
-	err := resource.provider.manager.CreateLogin(context, data.LoginName.Value, data.Password.Value)
+	err := resource.provider.manager.CreateLogin(context, data.LoginName.Value, data.Password.Value, data.DefaultDatabase.Value)
 	if err != nil {
 		response.Diagnostics.AddError("Failed to create login", err.Error())
 		return
 	}
 
 	data.Id = types.String{Value: data.LoginName.Value}
-
-	tflog.Trace(context, "created a resource")
 
 	diagnostics = response.State.Set(context, &data)
 	response.Diagnostics.Append(diagnostics...)
@@ -100,6 +103,7 @@ func (resource loginResource) Read(context context.Context, request tfsdk.ReadRe
 	}
 
 	data.LoginName = types.String{Value: login.LoginName}
+	data.DefaultDatabase = types.String{Value: login.DefaultDatabase}
 
 	diagnostics = response.State.Set(context, &data)
 	response.Diagnostics.Append(diagnostics...)
@@ -116,7 +120,7 @@ func (resource loginResource) Update(context context.Context, request tfsdk.Upda
 	}
 
 	// update login
-	err := resource.provider.manager.UpdateLogin(context, data.LoginName.Value, data.Password.Value)
+	err := resource.provider.manager.UpdateLogin(context, data.LoginName.Value, data.Password.Value, data.DefaultDatabase.Value)
 	if err != nil {
 		response.Diagnostics.AddError("Failed to update login", err.Error())
 		return

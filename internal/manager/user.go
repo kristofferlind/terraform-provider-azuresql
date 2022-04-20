@@ -91,6 +91,24 @@ func (manager *Manager) CreateLoginUser(context context.Context, username string
 	return nil
 }
 
+func (manager *Manager) UpdateUser(context context.Context, username string, password string, database string) error {
+	statement := fmt.Sprintf(`
+    ALTER USER [%[1]s] WITH PASSWORD = '%[2]s'
+  `, username, password)
+
+	err := manager.execute(
+		context,
+		statement,
+		database,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (manager *Manager) DeleteLoginUser(context context.Context, username string, database string) error {
 	statement := fmt.Sprintf(`
     DROP USER [%[1]s]

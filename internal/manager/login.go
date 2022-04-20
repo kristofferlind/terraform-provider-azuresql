@@ -7,15 +7,18 @@ import (
 )
 
 type DBLogin struct {
-	LoginName   string
-	PrincipalID string
+	LoginName       string
+	PrincipalID     string
+	DefaultDatabase string
 }
 
 func (manager *Manager) GetLogin(context context.Context, username string) (*DBLogin, error) {
 	var login DBLogin
 
 	statement := fmt.Sprintf(`
-    SELECT name, principal_id FROM [master].[sys].[sql_logins] WHERE [name] = '%[1]s'
+    SELECT name, principal_id, default_database_name
+    FROM master.sys.sql_logins
+    WHERE name = '%[1]s'
   `, username)
 
 	err := manager.queryRow(
@@ -23,7 +26,7 @@ func (manager *Manager) GetLogin(context context.Context, username string) (*DBL
 		statement,
 		"",
 		func(row *sql.Row) error {
-			return row.Scan(&login.LoginName, &login.PrincipalID)
+			return row.Scan(&login.LoginName, &login.PrincipalID, &login.DefaultDatabase)
 		},
 	)
 	if err != nil {
@@ -33,10 +36,10 @@ func (manager *Manager) GetLogin(context context.Context, username string) (*DBL
 	return &login, nil
 }
 
-func (manager *Manager) CreateLogin(context context.Context, username string, password string) error {
+func (manager *Manager) CreateLogin(context context.Context, username string, password string, defaultDatabase string) error {
 	statement := fmt.Sprintf(`
-    CREATE LOGIN [%[1]s] WITH PASSWORD = '%[2]s'
-  `, username, password)
+    CREATE LOGIN [%[1]s] WITH PASSWORD = '%[2]s', DEFAULT_DATABASE = [%[3]s]
+  `, username, password, defaultDatabase)
 
 	err := manager.execute(
 		context,
@@ -51,10 +54,10 @@ func (manager *Manager) CreateLogin(context context.Context, username string, pa
 	return nil
 }
 
-func (manager *Manager) UpdateLogin(context context.Context, username string, password string) error {
+func (manager *Manager) UpdateLogin(context context.Context, username string, password string, defaultDatabase string) error {
 	statement := fmt.Sprintf(`
-    ALTER LOGIN [%[1]s] WITH PASSWORD = '%[2]s'
-  `, username, password)
+    ALTER LOGIN [%[1]s] WITH PASSWORD = '%[2]s', DEFAULT_DATABASE = [%[3]s]
+  `, username, password, defaultDatabase)
 
 	err := manager.execute(
 		context,

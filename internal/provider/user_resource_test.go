@@ -20,12 +20,19 @@ func TestAccUserResource(t *testing.T) {
 					resource.TestCheckResourceAttr("azuresql_user.test", "database", "contained_test"),
 				),
 			},
-			// Update and Read testing
+			// Update name and database (recreate scenario)
 			{
 				Config: testAccUserResourceConfig("testlocaluser2", "P@ssw0rd", "contained_test2"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("azuresql_user.test", "name", "testlocaluser2"),
 					resource.TestCheckResourceAttr("azuresql_user.test", "database", "contained_test2"),
+				),
+			},
+			// Update password (in-place update)
+			{
+				Config: testAccUserResourceConfig("testlocaluser2", "P@ssw0rd!", "contained_test2"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("azuresql_user.test", "password", "P@ssw0rd!"),
 				),
 			},
 			// Delete testing automatically occurs in TestCase

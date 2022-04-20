@@ -22,16 +22,23 @@ test: install test-local-down test-local-up
 	TF_ACC=local go test -cover -v ./...
 	$(MAKE) test-local-down
 
+test-coverage-report: install test-local-down test-local-up
+	TF_ACC=local go test -cover -coverprofile=coverage.out -v ./...
+	$(MAKE) test-local-down
+	go tool cover -html=coverage.out
+
 test-release:
 	goreleaser release --rm-dist --skip-publish --skip-sign --snapshot
 
 test-local-up:
 	docker-compose up -d
+	while timeout --kill-after 20 10 docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "SELECT 1"; do sleep 2; done
 	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE test"
 	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE test2"
 	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "sp_configure 'contained database authentication', 1; RECONFIGURE"
 	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE contained_test CONTAINMENT = PARTIAL"
 	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE contained_test2 CONTAINMENT = PARTIAL"
+	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE [dash-test] CONTAINMENT = PARTIAL"
 
 test-local-down:
 	docker-compose down

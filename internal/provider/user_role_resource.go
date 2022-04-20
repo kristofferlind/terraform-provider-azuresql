@@ -125,6 +125,7 @@ func (resource userRoleResource) Update(context context.Context, request tfsdk.U
 	}
 
 	response.Diagnostics.AddError("Not implemented", "update should not be allowed on this resource, should always be a replace operation")
+	response.Diagnostics.Append(diagnostics...)
 }
 
 func (resource userRoleResource) Delete(context context.Context, request tfsdk.DeleteResourceRequest, response *tfsdk.DeleteResourceResponse) {

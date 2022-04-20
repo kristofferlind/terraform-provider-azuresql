@@ -120,7 +120,16 @@ func (resource userResource) Update(context context.Context, request tfsdk.Updat
 		return
 	}
 
-	response.Diagnostics.AddError("Not implemented", "update should not be allowed on this resource, should always be a replace operation")
+	err := resource.provider.manager.UpdateUser(context, data.LoginName.Value, data.Password.Value, data.Database.Value)
+	if err != nil {
+		response.Diagnostics.AddError("Failed to update user", err.Error())
+		return
+	}
+
+	data.Id = types.String{Value: data.LoginName.Value}
+
+	diagnostics = response.State.Set(context, &data)
+	response.Diagnostics.Append(diagnostics...)
 }
 
 func (resource userResource) Delete(context context.Context, request tfsdk.DeleteResourceRequest, response *tfsdk.DeleteResourceResponse) {

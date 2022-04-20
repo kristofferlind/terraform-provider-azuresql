@@ -26,4 +26,4 @@ Check makefile for more options.
 - aad_user is untested (feature is currently public preview)
 
 ## License
-Based on [terraform-provider-scaffolding-framework](https://github.com/hashicorp/terraform-provider-scaffolding-framework) and sticks with the license of that.
+Based on [terraform-provider-scaffolding-framework](https://github.com/hashicorp/terraform-provider-scaffolding-framework) and therefore also has the same license.

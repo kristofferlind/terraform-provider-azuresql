@@ -10,7 +10,9 @@ func (manager *Manager) GetAADLogin(context context.Context, username string) (*
 	var login DBLogin
 
 	statement := fmt.Sprintf(`
-    SELECT name, principal_id FROM [master].[sys].[server_principals] WHERE [name] = '%[1]s'
+    SELECT name, principal_id, default_database_name
+    FROM master.sys.server_principals
+    WHERE name = '%[1]s'
   `, username)
 
 	err := manager.queryRow(
@@ -18,7 +20,7 @@ func (manager *Manager) GetAADLogin(context context.Context, username string) (*
 		statement,
 		"",
 		func(row *sql.Row) error {
-			return row.Scan(&login.LoginName, &login.PrincipalID)
+			return row.Scan(&login.LoginName, &login.PrincipalID, &login.DefaultDatabase)
 		},
 	)
 	if err != nil {
@@ -28,10 +30,10 @@ func (manager *Manager) GetAADLogin(context context.Context, username string) (*
 	return &login, nil
 }
 
-func (manager *Manager) CreateAADLogin(context context.Context, username string) error {
+func (manager *Manager) CreateAADLogin(context context.Context, username string, defaultDatabase string) error {
 	statement := fmt.Sprintf(`
-    CREATE LOGIN [%[1]s] FROM EXTERNAL PROVIDER
-  `, username)
+    CREATE LOGIN [%[1]s] FROM EXTERNAL PROVIDER WITH DEFAULT_DATABASE = [%[2]s]
+  `, username, defaultDatabase)
 
 	err := manager.execute(
 		context,
@@ -46,10 +48,10 @@ func (manager *Manager) CreateAADLogin(context context.Context, username string)
 	return nil
 }
 
-func (manager *Manager) DeleteAADLogin(context context.Context, username string) error {
+func (manager *Manager) UpdateAADLogin(context context.Context, username string, defaultDatabase string) error {
 	statement := fmt.Sprintf(`
-    DROP LOGIN [%[1]s]
-  `, username)
+    ALTER LOGIN [%[1]s] WITH DEFAULT_DATABASE = [%[2]s]
+  `, username, defaultDatabase)
 
 	err := manager.execute(
 		context,

@@ -14,15 +14,15 @@ func TestAccLoginUserResource(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccLoginUserResourceConfig("testuser", "test"),
+				Config: testAccLoginUserResourceConfig("testuser2", "test"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("azuresql_login_user.test", "name", "testuser"),
+					resource.TestCheckResourceAttr("azuresql_login_user.test", "name", "testuser2"),
 					resource.TestCheckResourceAttr("azuresql_login_user.test", "database", "test"),
 				),
 			},
 			// Update and Read testing
 			{
-				Config: testAccLoginUserResourceConfig("testuser", "test2"),
+				Config: testAccLoginUserResourceConfig("testuser2", "test2"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("azuresql_login_user.test", "database", "test2"),
 				),
@@ -41,6 +41,7 @@ provider "azuresql" {
 resource "azuresql_login" "test" {
   name = %[1]q
   password = "P@ssw0rd"
+  default_database = "master"
 }
 
 resource "azuresql_login_user" "test" {

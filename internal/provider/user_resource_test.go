@@ -20,7 +20,14 @@ func TestAccUserResource(t *testing.T) {
 					resource.TestCheckResourceAttr("azuresql_user.test", "database", "contained_test"),
 				),
 			},
-			// Update and Read testing
+			// In place update (password)
+			{
+				Config: testAccUserResourceConfig("testlocaluser", "P@ssw0rd!", "contained_test"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("azuresql_user.test", "password", "P@ssw0rd!"),
+				),
+			},
+			// Replace update
 			{
 				Config: testAccUserResourceConfig("testlocaluser2", "P@ssw0rd", "contained_test2"),
 				Check: resource.ComposeAggregateTestCheckFunc(

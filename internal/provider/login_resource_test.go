@@ -20,11 +20,18 @@ func TestAccLoginResource(t *testing.T) {
 					resource.TestCheckResourceAttr("azuresql_login.test", "password", "p@ssword1"),
 				),
 			},
-			// Update and Read testing
+			// Test in-place password update
 			{
 				Config: testAccLoginResourceConfig("testuser", "p@ssword2"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("azuresql_login.test", "password", "p@ssword2"),
+				),
+			},
+			// Test recreate name update
+			{
+				Config: testAccLoginResourceConfig("testuser2", "p@ssword2"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("azuresql_login.test", "name", "testuser2"),
 				),
 			},
 			// Delete testing automatically occurs in TestCase

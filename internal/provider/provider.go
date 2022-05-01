@@ -39,6 +39,7 @@ func (provider *provider) GetResources(context context.Context) (map[string]tfsd
 	return map[string]tfsdk.ResourceType{
 		"azuresql_login":      loginResourceType{},
 		"azuresql_aad_login":  externalLoginResourceType{},
+		"azuresql_login_role": loginRoleResourceType{},
 		"azuresql_login_user": loginUserResourceType{},
 		"azuresql_user":       userResourceType{},
 		"azuresql_aad_user":   externalUserResourceType{},

@@ -55,6 +55,24 @@ func (manager *Manager) CreateUser(context context.Context, username string, pas
 	return nil
 }
 
+func (manager *Manager) UpdateUser(context context.Context, username string, password string, database string) error {
+	statement := fmt.Sprintf(`
+    ALTER USER [%[1]s] WITH PASSWORD = '%[2]s'
+  `, username, password)
+
+	err := manager.execute(
+		context,
+		statement,
+		database,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (manager *Manager) CreateExternalUser(context context.Context, username string, database string) error {
 	statement := fmt.Sprintf(`
     CREATE USER [%[1]s] FROM EXTERNAL PROVIDER'

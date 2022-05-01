@@ -122,7 +122,7 @@ func (resource externalLoginResource) Delete(context context.Context, request tf
 	}
 
 	// delete login
-	err := resource.provider.manager.DeleteAADLogin(context, data.LoginName.Value)
+	err := resource.provider.manager.DeleteLogin(context, data.LoginName.Value)
 	if err != nil {
 		response.Diagnostics.AddError("Failed to delete login", err.Error())
 		return

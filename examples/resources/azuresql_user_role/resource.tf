@@ -9,5 +9,5 @@ resource "azuresql_user_role" "this" {
   # for resources to be created/deleted in the correct order
   name     = azuresql_user.this.name
   database = azuresql_user.this.database
-  role     = "db_reader"
+  role     = "db_datareader"
 }

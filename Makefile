@@ -22,6 +22,11 @@ test: install test-local-down test-local-up
 	TF_ACC=local go test -cover -v ./...
 	$(MAKE) test-local-down
 
+test-coverage-report: install test-local-down test-local-up
+	TF_ACC=local go test -cover -coverprofile=coverage.out -v ./...
+	$(MAKE) test-local-down
+	go tool cover -html=coverage.out
+
 test-release:
 	goreleaser release --rm-dist --skip-publish --skip-sign --snapshot
 

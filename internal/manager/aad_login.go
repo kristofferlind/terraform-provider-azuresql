@@ -10,7 +10,9 @@ func (manager *Manager) GetAADLogin(context context.Context, username string) (*
 	var login DBLogin
 
 	statement := fmt.Sprintf(`
-    SELECT name, principal_id FROM [master].[sys].[server_principals] WHERE [name] = '%[1]s'
+    SELECT name, principal_id
+    FROM master.sys.server_principals
+    WHERE name = '%[1]s'
   `, username)
 
 	err := manager.queryRow(
@@ -39,23 +41,6 @@ func (manager *Manager) CreateAADLogin(context context.Context, username string)
 		"",
 	)
 
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (manager *Manager) DeleteAADLogin(context context.Context, username string) error {
-	statement := fmt.Sprintf(`
-    DROP LOGIN [%[1]s]
-  `, username)
-
-	err := manager.execute(
-		context,
-		statement,
-		"",
-	)
 	if err != nil {
 		return err
 	}

@@ -4,7 +4,7 @@ NAME=azuresql
 BINARY=terraform-provider-${NAME}
 OS_ARCH=linux_amd64
 
-VERSION=0.0.1
+VERSION=0.2.1
 
 build:
 	go mod download

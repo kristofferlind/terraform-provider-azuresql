@@ -32,7 +32,7 @@ test-release:
 
 test-local-up:
 	docker-compose up -d
-	while timeout --kill-after 20 10 docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "SELECT 1"; do sleep 2; done
+	./scripts/wait-for-mssql.sh
 	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE test"
 	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE test2"
 	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "sp_configure 'contained database authentication', 1; RECONFIGURE"

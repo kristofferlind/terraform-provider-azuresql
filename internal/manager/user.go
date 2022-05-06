@@ -75,7 +75,7 @@ func (manager *Manager) UpdateUser(context context.Context, username string, pas
 
 func (manager *Manager) CreateExternalUser(context context.Context, username string, database string) error {
 	statement := fmt.Sprintf(`
-    CREATE USER [%[1]s] FROM EXTERNAL PROVIDER'
+    CREATE USER [%[1]s] FROM EXTERNAL PROVIDER
   `, username)
 
 	err := manager.execute(

@@ -14,9 +14,10 @@ Other than terraform boilerplate/plumbing this provider only utilizes an mssql d
 ## Development
 This plugin is based on Terraform Plugin Framework and the documentation for that should therefore be a good source of information (https://www.terraform.io/plugin/framework).
 
+If you have [direnv](https://direnv.net/) and [nix package manager](https://nixos.org/) installed. You should be able to just start using commands found in Makefile. If you don't want those you can look at shell.nix to see what's needed.
+
 command | description
 ---|---
-`nix-shell --pure` | open shell with all prerequisites installed  
 `make test` | build, install and execute tests
 
 Check makefile for more options.
@@ -26,4 +27,4 @@ Check makefile for more options.
 - aad_user is untested (feature is currently public preview)
 
 ## License
-Based on [terraform-provider-scaffolding-framework](https://github.com/hashicorp/terraform-provider-scaffolding-framework) and therefore also has the same license.
+Based on [terraform-provider-scaffolding-framework](https://github.com/hashicorp/terraform-provider-scaffolding-framework) and copied its license at time of creation.

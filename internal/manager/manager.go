@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	_ "github.com/denisenkom/go-mssqldb"
-	"github.com/denisenkom/go-mssqldb/azuread"
+	_ "github.com/microsoft/go-mssqldb"
+	"github.com/microsoft/go-mssqldb/azuread"
 )
 
 type Manager struct {

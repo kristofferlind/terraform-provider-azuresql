@@ -47,7 +47,8 @@ jobs:
       matrix:
         terraform:
           - '1.0.*'
-          - '1.1.*'
+          - '1.8.*'
+          - '1.9.*'
     steps:
       - uses: actions/setup-go@v3
         with:

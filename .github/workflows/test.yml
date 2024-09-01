@@ -47,8 +47,12 @@ jobs:
       matrix:
         terraform:
           - '1.0.*'
-          - '1.1.*'
+          - '1.8.*'
+          - '1.9.*'
     steps:
+      - uses: KengoTODA/actions-setup-docker-compose@v1
+        with:
+          version: '1.29.2' # fairly old, matches docker-compose version from nix, update..
       - uses: actions/setup-go@v3
         with:
           go-version: ${{ env.GO_VERSION }}

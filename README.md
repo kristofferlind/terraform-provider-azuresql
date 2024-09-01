@@ -9,14 +9,15 @@ Using an unofficial terraform provider is pretty scary and it therefore needs to
 This provider currently only has acceptance tests against a local docker based mssql instance and has received a little bit of manual testing against Azure SQL Server and Azure AD. It's my first time creating a terraform provider and I'm still a bit of a Golang newbie. **Do not use this unless you can first test all your changes in an environment that is ok to break**.
 
 ## Dependencies
-Other than terraform boilerplate/plumbing this provider only utilizes an mssql driver, specifically github.com/denisenkom/go-mssqldb, which is also mentioned in Microsoft's documentation for working with mssql using golang.
+Other than terraform boilerplate/plumbing this provider only utilizes an mssql driver, specifically github.com/microsoft/go-mssqldb, the official driver for MSSQL with Go from Microsoft.
 
 ## Development
 This plugin is based on Terraform Plugin Framework and the documentation for that should therefore be a good source of information (https://www.terraform.io/plugin/framework).
 
+If you have [direnv](https://direnv.net/) and [nix package manager](https://nixos.org/) installed. You should be able to just start using commands found in Makefile. If you don't want those you can look at shell.nix to see what's needed.
+
 command | description
 ---|---
-`nix-shell --pure` | open shell with all prerequisites installed  
 `make test` | build, install and execute tests
 
 Check makefile for more options.
@@ -26,4 +27,4 @@ Check makefile for more options.
 - aad_user is untested (feature is currently public preview)
 
 ## License
-Based on [terraform-provider-scaffolding-framework](https://github.com/hashicorp/terraform-provider-scaffolding-framework) and therefore also has the same license.
+Based on [terraform-provider-scaffolding-framework](https://github.com/hashicorp/terraform-provider-scaffolding-framework) and copied its license at time of creation.

@@ -23,7 +23,7 @@ provider "azuresql" {
   connection_string = "sqlserver://some-server.database.windows.net:1433?fedauth=ActiveDirectoryDefault"
 }
 
-# check https://github.com/denisenkom/go-mssqldb#azure-active-directory-authentication for other fedauth options
+# check https://github.com/microsoft/go-mssqldb#azure-active-directory-authentication for other fedauth options
 
 # You can manage multiple servers by utilizing provider aliases
 provider "azuresql" {

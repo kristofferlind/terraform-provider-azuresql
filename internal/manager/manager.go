@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	_ "github.com/denisenkom/go-mssqldb"
-	"github.com/denisenkom/go-mssqldb/azuread"
+	_ "github.com/microsoft/go-mssqldb"
+	"github.com/microsoft/go-mssqldb/azuread"
 )
 
 type Manager struct {
@@ -55,28 +55,34 @@ func (manager *Manager) queryRow(context context.Context, query string, database
 }
 
 func (manager *Manager) connect(context context.Context, database string) (*sql.DB, error) {
-	db, err := manager.open(context, database)
-	if err == nil {
-		return db, nil
-	}
-
-	// keep trying if connection fails
+	// keep trying to connect for a minute
 	interval := 1 * time.Second
 	timeout := 1 * time.Minute
 
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 
+  var collectedErrors []string
+
 	timeoutExceeded := time.After(timeout)
 	for {
 		select {
 		case <-timeoutExceeded:
-			return nil, fmt.Errorf("failed to connect to database")
+      timeoutError := fmt.Errorf("Timeout reached, give up trying to connect")
+      collectedErrors = append(collectedErrors, timeoutError.Error())
+			return nil, fmt.Errorf(strings.Join(collectedErrors, "\n\n"))
 		case <-ticker.C:
 			db, err := manager.open(context, database)
 			if err == nil {
 				return db, nil
-			}
+			} else {
+        collectedErrors = append(collectedErrors, err.Error())
+
+        // break early for errors that are unlikely to be fixed by trying again
+        if strings.Contains(err.Error(), "Login failed for user") { // wrong credentials
+          return nil, fmt.Errorf(strings.Join(collectedErrors, "\n\n"))
+        }
+      }
 		}
 	}
 }

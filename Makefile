@@ -4,7 +4,7 @@ NAME=azuresql
 BINARY=terraform-provider-${NAME}
 OS_ARCH=linux_amd64
 
-VERSION=0.2.1
+VERSION=0.3.0
 
 build:
 	go mod download
@@ -12,7 +12,7 @@ build:
 
 install: build
 	mkdir -p ~/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${OS_ARCH}
-	mv ${BINARY} ~/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${OS_ARCH}
+	mv ${BINARY} ~/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${OS_ARCH}/${BINARY}_v${VERSION}
 
 generate:
 	go mod tidy
@@ -33,11 +33,11 @@ test-release:
 test-local-up:
 	docker-compose up -d
 	./scripts/wait-for-mssql.sh
-	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE test"
-	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE test2"
-	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "sp_configure 'contained database authentication', 1; RECONFIGURE"
-	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE contained_test CONTAINMENT = PARTIAL"
-	docker-compose exec -T mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -Q "CREATE DATABASE contained_test2 CONTAINMENT = PARTIAL"
+	docker-compose exec -T mssql /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -No -Q "CREATE DATABASE test"
+	docker-compose exec -T mssql /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -No -Q "CREATE DATABASE test2"
+	docker-compose exec -T mssql /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -No -Q "sp_configure 'contained database authentication', 1; RECONFIGURE"
+	docker-compose exec -T mssql /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -No -Q "CREATE DATABASE contained_test CONTAINMENT = PARTIAL"
+	docker-compose exec -T mssql /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'p@ssw0rd' -No -Q "CREATE DATABASE contained_test2 CONTAINMENT = PARTIAL"
 
 test-local-down:
 	docker-compose down

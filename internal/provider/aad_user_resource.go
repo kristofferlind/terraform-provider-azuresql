@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
@@ -92,6 +93,11 @@ func (resource externalUserResource) Read(context context.Context, request tfsdk
 
 	user, err := resource.provider.manager.GetLoginUser(context, data.LoginName.Value, data.Database.Value)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			response.State.RemoveResource(context)
+			return
+		}
+
 		response.Diagnostics.AddError("Failed to read user", err.Error())
 		return
 	}
